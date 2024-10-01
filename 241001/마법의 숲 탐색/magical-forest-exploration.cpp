@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
 #include <algorithm>
@@ -11,7 +12,7 @@ struct ss {
 };
 
 ss golem[1001];
-int mmap[73][73], max_r[1001], visit[1001];
+int mmap[74][74], max_r[1001], visit[1001], loc[1001][2];
 vector<int> adj[1001];
 
 int turn_left(int x)
@@ -23,7 +24,6 @@ int turn_left(int x)
 
 void reset(void)
 {
-    int i, j;
     memset(mmap, 0, sizeof(mmap));
 }
 
@@ -69,39 +69,74 @@ int move(int n)
     }
     if (x <= 3)
         return 0;
+    
     mmap[x][y] = mmap[x + 1][y] = mmap[x - 1][y] = mmap[x][y + 1] = mmap[x][y - 1] = n;
     max_r[n] = x + 1;
+
+    if (y - 1 >= 1 && loc[mmap[x - 1][y - 1]][0] == x - 1 && loc[mmap[x - 1][y - 1]][1] == y - 1)
+        adj[mmap[x - 1][y - 1]].push_back(n);
+    if (y + 1 <= c && loc[mmap[x - 1][y + 1]][0] == x - 1 && loc[mmap[x - 1][y + 1]][1] == y + 1)
+        adj[mmap[x - 1][y + 1]].push_back(n);
+    if (loc[mmap[x - 2][y]][0] == x - 2 && loc[mmap[x - 2][y]][1] == y)
+        adj[mmap[x - 2][y]].push_back(n);
+    if (y + 2 <= c && loc[mmap[x][y + 2]][0] == x && loc[mmap[x][y + 2]][1] == y + 2)
+        adj[mmap[x][y + 2]].push_back(n);
+    if (y + 1 <= c && loc[mmap[x + 1][y + 1]][0] == x + 1 && loc[mmap[x + 1][y + 1]][1] == y + 1)
+        adj[mmap[x + 1][y + 1]].push_back(n);
+    if (y - 1 >= 1 && loc[mmap[x + 1][y - 1]][0] == x + 1 && loc[mmap[x + 1][y - 1]][1] == y - 1)
+        adj[mmap[x + 1][y - 1]].push_back(n);
+    if (loc[mmap[x + 2][y]][0] == x + 2 && loc[mmap[x + 2][y]][1] == y)
+        adj[mmap[x + 2][y]].push_back(n);
+    if (y - 2 >= 1 && loc[mmap[x][y - 2]][0] == x && loc[mmap[x][y - 2]][1] == y - 2)
+        adj[mmap[x][y - 2]].push_back(n);
+    
     if (golem[n].d == 0) {
-        if (y - 1 >= 1 && mmap[x - 1][y - 1])
+        loc[n][0] = x - 1, loc[n][1] = y;
+        if (y - 1 >= 1 && mmap[x - 1][y - 1]) {
             adj[n].push_back(mmap[x - 1][y - 1]);
-        if (y + 1 <= c && mmap[x - 1][y + 1])
+        }
+        if (y + 1 <= c && mmap[x - 1][y + 1]) {
             adj[n].push_back(mmap[x - 1][y + 1]);
-        if (mmap[x - 2][y])
+        }
+        if (mmap[x - 2][y]) {
             adj[n].push_back(mmap[x - 2][y]);
+        }
     }
     else if (golem[n].d == 1) {
-        if (y + 1 <= c && mmap[x - 1][y + 1])
+        loc[n][0] = x, loc[n][1] = y + 1;
+        if (y + 1 <= c && mmap[x - 1][y + 1]) {
             adj[n].push_back(mmap[x - 1][y + 1]);
-        if (y + 2 <= c && mmap[x][y + 2])
+        }
+        if (y + 2 <= c && mmap[x][y + 2]) {
             adj[n].push_back(mmap[x][y + 2]);
-        if (y + 1 <= c && mmap[x + 1][y + 1])
+        }
+        if (y + 1 <= c && mmap[x + 1][y + 1]) {
             adj[n].push_back(mmap[x + 1][y + 1]);
+        }
     }
     else if (golem[n].d == 2) {
-        if (y - 1 >= 1 && mmap[x + 1][y - 1])
+        loc[n][0] = x + 1, loc[n][1] = y;
+        if (y - 1 >= 1 && mmap[x + 1][y - 1]) {
             adj[n].push_back(mmap[x + 1][y - 1]);
-        if (y + 1 <= c && mmap[x + 1][y + 1] >= 1)
+        }
+        if (y + 1 <= c && mmap[x + 1][y + 1]) {
             adj[n].push_back(mmap[x + 1][y + 1]);
-        if (x <= r && mmap[x + 2][y])
+        }
+        if (x <= r && mmap[x + 2][y]) {
             adj[n].push_back(mmap[x + 2][y]);
+        }
     }
     else if (golem[n].d == 3) {
-        if (y - 1 >= 1 && mmap[x - 1][y - 1])
+        loc[n][0] = x, loc[n][1] = y - 1;
+        if (y - 1 >= 1 && mmap[x - 1][y - 1]) {
             adj[n].push_back(mmap[x - 1][y - 1]);
-        if (y - 2 >= 1 && mmap[x][y - 2])
+        }
+        if (y - 2 >= 1 && mmap[x][y - 2]) {
             adj[n].push_back(mmap[x][y - 2]);
-        if (y - 1 >= 1 && mmap[x + 1][y - 1])
+        }
+        if (y - 1 >= 1 && mmap[x + 1][y - 1]) {
             adj[n].push_back(mmap[x + 1][y - 1]);
+        }
     }
     memset(visit, 0, sizeof(visit));
     return bfs(n) - 2;
@@ -110,11 +145,11 @@ int move(int n)
 int main()
 {
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    //freopen("input.txt", "r", stdin);
     int i, ans = 0, chk;
     cin >> r >> c >> k;
     for (i = 1; i <= k; i++)
         cin >> golem[i].c >> golem[i].d;
-    reset();
     for (i = 1; i <= k; i++) {
         chk = move(i);
         if (!chk)
