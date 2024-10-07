@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-vector<int> cus;
+vector<long> cus;
 int main() {
     ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    int n, c, j, w, i, t, ans=0;
+    long n, c, j, w, i, t, ans=0;
     cin>>n;
     for(i=1;i<=n;i++) {
         cin>>t;
