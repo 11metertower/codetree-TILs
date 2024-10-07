@@ -4,7 +4,6 @@
 #include <cstring>
 using namespace std;
 int n;
-int first_mapp[21][21];
 
 void move(int direction, int (*mapp)[21])
 {
@@ -116,7 +115,9 @@ void move(int direction, int (*mapp)[21])
 int func(int level, int direction, int (*mapp)[21])
 {
 	int i, j, ret = 0;
+	int first_mapp[21][21];
 	move(direction, mapp);
+	memcpy(first_mapp, mapp, sizeof(first_mapp));
 	if (level == 5) {
 		for (i = 1; i <= n; i++)
 			for (j = 1; j <= n; j++)
@@ -124,6 +125,7 @@ int func(int level, int direction, int (*mapp)[21])
 		return ret;
 	}
 	for (i = 1; i <= 4; i++) {
+		memcpy(mapp, first_mapp, sizeof(first_mapp));
 		ret = max(func(level + 1, i, mapp), ret);
 	}
 	return ret;
@@ -135,13 +137,15 @@ int main()
 	//freopen("input.txt", "r", stdin);
 	int i, j, ans;
 	int mapp[21][21];
+	int first_mapp[21][21];
+	memset(first_mapp, 0, sizeof(first_mapp));
 	cin >> n;
 	for (i = 1; i <= n; i++)
 		for (j = 1; j <= n; j++)
 			cin >> first_mapp[i][j];
 	for (i = 1; i <= 4; i++) {
 		memcpy(mapp, first_mapp, sizeof(mapp));
-		ans = max(ans, func(0, i, mapp));
+		ans = max(ans, func(1, i, mapp));
 	}
 	cout << ans;
 	return 0;
