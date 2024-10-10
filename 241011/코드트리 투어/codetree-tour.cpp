@@ -4,20 +4,15 @@
 #include <queue>
 #include <vector>
 #include <algorithm>
+#include <map>
 #define INF 0x7fffffff
 using namespace std;
 int n, m, start;
 int least[2001];
 bool visit[2001];
 int adj_list[2001][2001];
-bool id_exist[30001];
 vector<pair<int, int>> adj[2001];
-struct good {
-	int id;
-	int revenue;
-	int dest;
-};
-vector<good> goods;
+map<int, pair<int, int>> goods;
 priority_queue<pair<int, int>> pq;
 
 void reset(void)
@@ -50,19 +45,18 @@ void dijkstra(void)
 
 int sell()
 {
-	int maxx = -1, ret = -1;
-	for(auto i : goods) {
-		if (!id_exist[i.id])
-			continue;
-		int cost = least[i.dest];
-		if (cost != INF || cost <= i.revenue) {
-			if (i.revenue - cost > maxx) {
-				maxx = i.revenue - cost;
-				ret = i.id;
+	int maxx = -1, ret = -1, idx = 0;
+	for (auto i : goods) {
+		int id = i.first, revenue = i.second.first, dest = i.second.second;
+		int cost = least[dest];
+		if (cost != INF || cost <= revenue) {
+			if (revenue - cost > maxx) {
+				maxx = revenue - cost;
+				ret = id;
 			}
-			else if (i.revenue - cost == maxx) {
-				if (ret > i.id) {
-					ret = i.id;
+			else if (revenue - cost == maxx) {
+				if (ret > id) {
+					ret = id;
 				}
 			}
 		}
@@ -96,16 +90,13 @@ int main()
 		}
 		else if (num == 200) {
 			int id, revenue, dest;
-			good tmp;
 			cin >> id >> revenue >> dest;
-			id_exist[id] = 1;
-			tmp.id = id, tmp.revenue = revenue, tmp.dest = dest;
-			goods.push_back(tmp);
+			goods.insert({ id,{revenue,dest} });
 		}
 		else if (num == 300) {
 			int id;
 			cin >> id;
-			id_exist[id] = 0;
+			goods.erase(id);
 		}
 		else if (num == 400) {
 			if (flag) {
@@ -116,7 +107,7 @@ int main()
 			int output = sell();
 			cout << output << "\n";
 			if (output != -1)
-				id_exist[output] = 0;
+				goods.erase(output);
 		}
 		else {
 			cin >> start;
