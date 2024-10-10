@@ -9,7 +9,7 @@
 using namespace std;
 int n, m, start;
 int least[2001];
-bool visit[2001], id_exist[2001];
+bool visit[2001], id_exist[30001];
 int adj_list[2001][2001];
 vector<pair<int, int>> adj[2001];
 
@@ -24,7 +24,7 @@ bool operator<(pair<int, good> a, pair<int, good> b)
 	return a.first < b.first;
 }
 
-priority_queue<pair<int, good>, vector<pair<int, good>>> goods;
+priority_queue<pair<int, good>> goods;
 priority_queue<pair<int, int>> pq;
 
 
