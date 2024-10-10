@@ -8,6 +8,7 @@
 using namespace std;
 int n, m, start;
 int least[2001];
+bool visit[2001];
 int adj_list[2001][2001];
 bool id_exist[30001];
 vector<pair<int, int>> adj[2001];
@@ -24,6 +25,7 @@ void reset(void)
 	int i;
 	for (i = 0; i < n; i++) {
 		least[i] = INF;
+		visit[i] = 0;
 	}
 	least[start] = 0;
 }
@@ -33,9 +35,10 @@ void dijkstra(void)
 	reset();
 	while (!pq.empty()) {
 		auto curr = pq.top();
+		visit[curr.second] = 1;
 		pq.pop();
 		for (auto next : adj[curr.second]) {
-			if (least[next.first] == INF) {
+			if (!visit[next.first]) {
 				if (least[next.first] > least[curr.second] + next.second) {
 					least[next.first] = least[curr.second] + next.second;
 					pq.push({ -least[next.first], next.first });
