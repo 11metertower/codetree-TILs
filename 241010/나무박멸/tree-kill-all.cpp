@@ -87,9 +87,11 @@ int kill(void)
 		for (it = 1; it <= k; it++) {
 			x = i + loc2[t][0] * it, y = j + loc2[t][1] * it;
 			if (x >= 1 && x <= n && y >= 1 && y <= n) {
-				if (mapp[x][y] <= 0)
+				if (mapp[x][y] < -10)
 					break;
 				mapp[x][y] = -c;
+				if (mapp[x][y] == 0)
+					break;
 			}
 		}
 	}
