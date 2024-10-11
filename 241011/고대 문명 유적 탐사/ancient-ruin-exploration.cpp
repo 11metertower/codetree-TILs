@@ -101,9 +101,9 @@ int main()
 		cin >> parts[i];
 	for (tc = 1; tc <= k; tc++) {
 		maxx = 0;
-		for (tt = 0; tt < 4; tt++) {
-			for (i = 2; i <= 4; i++) {
-				for (j = 2; j <= 4; j++) {
+		for (tt = 1; tt < 4; tt++) {
+			for (j = 2; j <= 4; j++) {
+				for (i = 2; i <= 4; i++) {
 					sum = 0;
 					memset(visit, 0, sizeof(visit));
 					memcpy(cpy, mapp, sizeof(cpy));
